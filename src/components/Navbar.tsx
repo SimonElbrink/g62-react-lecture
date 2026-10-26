@@ -1,7 +1,24 @@
-import {Calendar, Home, Info, Menu, Phone, Rocket, Sparkle, X} from "lucide-react";
+import React from "react";
+import {Calendar, Home, Info, Menu, Phone, Rocket, Star, X} from "lucide-react";
 
+type NavItem = {
+    label: string;
+    href: string;
+    icon: React.ElementType;
+}
 
 const Navbar = () => {
+
+    const title: string = "Event App"
+
+    const items: NavItem[] = [
+        {label: 'Home', href: '#', icon: Home},
+        {label: 'About', href: '#', icon: Info},
+        {label: 'Features', href: '#', icon: Star},
+        {label: 'Contact', href: '#', icon: Phone}
+    ];
+
+
     return (
         <nav
             className="fixed w-full z-50 transition-all duration-300 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 shadow-xl">
@@ -11,36 +28,31 @@ const Navbar = () => {
                     <div className="flex items-center group cursor-pointer">
                         <div
                             className="flex-shrink-0 bg-red-600 p-2 rounded-xl group-hover:bg-red-700 transition-colors duration-300">
-                            <Calendar className="size-6 text-white" />
+                            <Calendar className="size-6 text-white"/>
 
                         </div>
                         <span
-                            className="ml-3 font-bold text-2xl tracking-tight text-white group-hover:text-red-500 transition-colors duration-300">Event App</span>
+                            className="ml-3 font-bold text-2xl tracking-tight text-white group-hover:text-red-500 transition-colors duration-300">{title}</span>
                     </div>
 
                     {/*Desktop Menu*/}
                     <div className="hidden md:block">
                         <div className="ml-10 flex items-center space-x-8">
-                            <a href="#"
-                               className="flex items-center text-slate-300 hover:text-red-500 text-sm font-semibold transition-colors duration-200">
-                                <Home className="w-4 h-4 mr-2"/>
-                                Home
-                            </a>
-                            <a href="#"
-                               className="flex items-center text-slate-300 hover:text-red-500 text-sm font-semibold transition-colors duration-200">
-                                <Info className="w-4 h-4 mr-2"/>
-                                About
-                            </a>
-                            <a href="#"
-                               className="flex items-center text-slate-300 hover:text-red-500 text-sm font-semibold transition-colors duration-200">
-                                <Sparkle className="w-4 h-4 mr-2"/>
-                                Features
-                            </a>
-                            <a href="#"
-                               className="flex items-center text-slate-300 hover:text-red-500 text-sm font-semibold transition-colors duration-200">
-                                <Phone className="w-4 h-4 mr-2"/>
-                                Contact
-                            </a>
+
+                            {items.map((item, index) => {
+
+                                const Icon = item.icon;
+                                return (
+                                    <a key={index}
+                                       href={item.href}
+                                       className="flex items-center text-slate-300 hover:text-red-500 text-sm font-semibold transition-colors duration-200">
+                                        <Icon className="w-4 h-4 mr-2"/>
+                                        {item.label}
+                                    </a>
+                                )
+                            })}
+
+
                             <button
                                 className="bg-red-600 text-white px-6 py-2.5 rounded-full font-bold text-sm hover:bg-red-700 hover:shadow-lg hover:shadow-red-900/30 transition-all transform hover:-translate-y-0.5 active:scale-95 flex items-center">
                                 <Rocket className="w-4 h-4 mr-2"/>
@@ -49,13 +61,14 @@ const Navbar = () => {
                         </div>
                     </div>
 
+
                     {/*Mobile Menu Toggle (Checkbox Hack)*/}
                     <div className="md:hidden flex items-center">
                         <input type="checkbox" id="mobile-menu-toggle" className="hidden peer"/>
                         <label htmlFor="mobile-menu-toggle"
                                className="inline-flex items-center justify-center p-2 rounded-lg text-slate-300 hover:bg-slate-800 cursor-pointer transition-colors duration-200">
-                            <Menu className="block h-6 w-6 peer-checked:hidden" aria-hidden="true" />
-                            <X className="hidden h-6 w-6 peer-checked:block" aria-hidden="true" />
+                            <Menu className="block h-6 w-6 peer-checked:hidden" aria-hidden="true"/>
+                            <X className="hidden h-6 w-6 peer-checked:block" aria-hidden="true"/>
                         </label>
 
                         {/*Mobile Menu Container*/}
