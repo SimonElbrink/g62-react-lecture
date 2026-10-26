@@ -1,10 +1,10 @@
-import StaticEventApp from "./components/StaticEventApp.tsx";
+import TSXProfileCard from "./components/TSXProfileCard.tsx";
 
 function App() {
 
   return (
     <>
-      <StaticEventApp/>
+      <TSXProfileCard/>
     </>
   )
 }
