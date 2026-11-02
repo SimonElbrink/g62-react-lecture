@@ -8,10 +8,11 @@ interface EventCardProps {
     attendees: number | string;
     category: string;
     image: string;
+    onRegister?: () => void;
 }
 
 
-const EventCard = ({title, date, time, location, attendees, category, image}: EventCardProps) => {
+const EventCard = ({title, date, time, location, attendees, category, image, onRegister}: EventCardProps) => {
     return (
         <div
             className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border-2 border-slate-100 hover:border-red-100 group">
@@ -55,6 +56,7 @@ const EventCard = ({title, date, time, location, attendees, category, image}: Ev
                     </div>
                 </div>
                 <button
+                    onClick={onRegister}
                     className="w-full py-3 bg-slate-50 text-slate-900 font-bold rounded-xl group-hover:bg-red-600 group-hover:text-white transition-all duration-300">Register
                     Now
                 </button>
