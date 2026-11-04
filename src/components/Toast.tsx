@@ -16,7 +16,7 @@ const Toast = ({ message, type = 'success', onClose }: ToastProps) => {
         // EFFECT: runs when the Toast appears (mounts) — start the countdown
         const timer = setTimeout(() => {
             onClose();
-        }, 3000);
+        }, 5000);
 
         // CLEANUP: runs when the Toast unmounts — cancel the countdown
         return () => clearTimeout(timer);

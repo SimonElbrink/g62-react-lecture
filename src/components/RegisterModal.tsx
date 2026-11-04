@@ -1,4 +1,5 @@
 import {Mail, User, X} from "lucide-react";
+import {type ChangeEvent, type FormEvent, useState} from "react";
 
 // or move to types.ts
 type EventItem = {
@@ -19,6 +20,55 @@ type RegisterModalProps = {
 }
 
 const RegisterModal = ({ event, onClose, onSuccess }: RegisterModalProps) => {
+
+
+    // Controlled form: the inputs show exactly what this state holds
+    const [formData, setFormData] = useState<{ name: string; email: string }>({
+        name: "",
+        email: "",
+    });
+
+    // One optional message per field — empty object means "no errors"
+    const [errors, setErrors] = useState<{ name?: string; email?: string }>({});
+
+    // One handler for all inputs: the input's `name` attribute matches the state key
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+
+        // Stop the browser's default form submission (which reloads the page)
+        e.preventDefault();
+
+        // 1. VALIDATE — plain TypeScript, no library needed
+        const newErrors: { name?: string; email?: string } = {};
+
+        if (!formData.name.trim()) {
+            newErrors.name = 'Name is required';
+        }
+
+        if (!formData.email.trim()) {
+            newErrors.email = 'Email is required';
+        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+            newErrors.email = 'Email is not valid';
+        }
+
+        setErrors(newErrors);
+
+
+        if (Object.keys(newErrors).length > 0) {
+            return;
+        }
+
+
+
+        console.log("Sending the Request -- TO API");
+
+        onSuccess(`You have successfully registered for ${event.title}!`);
+
+    }
 
 
     return (
@@ -58,7 +108,7 @@ const RegisterModal = ({ event, onClose, onSuccess }: RegisterModalProps) => {
                             Register for this Event
                         </h3>
 
-                        <form className="space-y-4" >
+                        <form className="space-y-4"  onSubmit={handleSubmit}>
                             <div>
                                 <label className="block text-sm font-medium text-slate-700 mb-1">
                                     Full Name
@@ -68,10 +118,16 @@ const RegisterModal = ({ event, onClose, onSuccess }: RegisterModalProps) => {
                                     <input
                                         type="text"
                                         name="name"
-                                        required
+                                        onChange={handleInputChange}
                                         className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition"
                                     />
                                 </div>
+
+                                {/* Validation message — rendered only when this field has an error */}
+                                {errors.name && (
+                                    <p className="mt-1 text-sm text-red-600">{errors.name}</p>
+                                )}
+
                             </div>
 
                             <div>
@@ -83,15 +139,20 @@ const RegisterModal = ({ event, onClose, onSuccess }: RegisterModalProps) => {
                                     <input
                                         type="email"
                                         name="email"
-                                        required
+                                        onChange={handleInputChange}
                                         className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition"
                                     />
                                 </div>
+
+                                {errors.email && (
+                                    <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                                )}
+
                             </div>
 
                             <button
-                                onClick={() => onSuccess}
-                                type="button"
+                                // onClick={() => onSuccess}
+                                type="submit"
                                 className="w-full bg-red-600 text-white py-3 rounded-xl font-semibold hover:bg-red-700 transition shadow-sm"
                             >
                                 Confirm Registration

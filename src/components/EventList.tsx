@@ -133,9 +133,11 @@ const EventList = () => {
                                            setIsModalOpen(false);
                                            setSelectedEvent(null)
                                        }}
-                                       onSuccess={() => {
+                                       onSuccess={(message: string) => {
                                            setIsModalOpen(false);
                                            setSelectedEvent(null);
+                                           setShowToast(true);
+                                           setToastMessage(message)
                                        }}
                         />
                     )}
