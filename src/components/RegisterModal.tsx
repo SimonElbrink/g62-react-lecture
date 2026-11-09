@@ -1,5 +1,5 @@
 import {Mail, User, X} from "lucide-react";
-import {type ChangeEvent, type FormEvent, useState} from "react";
+import {type ChangeEvent, type SubmitEvent, useState} from "react";
 
 // or move to types.ts
 type EventItem = {
@@ -37,7 +37,7 @@ const RegisterModal = ({ event, onClose, onSuccess }: RegisterModalProps) => {
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
 
         // Stop the browser's default form submission (which reloads the page)
         e.preventDefault();
@@ -118,6 +118,7 @@ const RegisterModal = ({ event, onClose, onSuccess }: RegisterModalProps) => {
                                     <input
                                         type="text"
                                         name="name"
+                                        value={formData.name}
                                         onChange={handleInputChange}
                                         className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition"
                                     />
@@ -139,6 +140,7 @@ const RegisterModal = ({ event, onClose, onSuccess }: RegisterModalProps) => {
                                     <input
                                         type="email"
                                         name="email"
+                                        value={formData.email}
                                         onChange={handleInputChange}
                                         className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition"
                                     />
