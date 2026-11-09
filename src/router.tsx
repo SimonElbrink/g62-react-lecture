@@ -1,8 +1,12 @@
-import { createBrowserRouter, Link } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import RootLayout from "./layouts/RootLayout.tsx";
 import AboutPage from "./pages/AboutPage.tsx";
 import ContactPage from "./pages/ContactPage.tsx";
 import HomePage from "./pages/HomePage.tsx";
+import NotFoundPage from "./pages/NotFoundPage.tsx";
+import LoginPage from "./pages/LoginPage.tsx";
+import UserProfile from "./pages/UserProfile.tsx";
+
 
 const router = createBrowserRouter([
     {
@@ -22,16 +26,18 @@ const router = createBrowserRouter([
                 element: <ContactPage />,
             },
             {
+                path: "user/:userId",
+                element: <UserProfile />,
+            },
+
+            {
+                path: "/login",
+                element: <LoginPage />,
+            },
+
+            {
                 path: "*",
-                element: (
-                    <div className="py-24 text-center">
-                        <h1 className="text-4xl font-bold text-slate-900 mb-4">404 - Page Not Found</h1>
-                        <p className="text-slate-600 mb-8">The page you are looking for does not exist.</p>
-                        <Link to="/" className="inline-flex items-center px-6 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-colors">
-                            Go Back Home
-                        </Link>
-                    </div>
-                ),
+                element: <NotFoundPage/>,
             }
         ]
     }

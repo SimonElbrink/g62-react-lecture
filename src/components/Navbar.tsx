@@ -1,6 +1,6 @@
 import React from "react";
 import {Calendar, Home, Info, Menu, Phone, Rocket, Star, X} from "lucide-react";
-import {Link, NavLink} from "react-router-dom";
+import {Link, NavLink, useNavigate} from "react-router-dom";
 
 type NavItem = {
     label: string;
@@ -9,6 +9,8 @@ type NavItem = {
 }
 
 const Navbar = () => {
+
+    const navigate = useNavigate();
 
     const title: string = "Event App"
 
@@ -106,6 +108,12 @@ const Navbar = () => {
                                         Get Started
                                     </button>
                                 </div>
+
+                                <button
+                                    onClick={() => navigate('/login')}
+                                    className="bg-red-600 text-white px-6 py-2.5 rounded-full font-bold text-sm hover:bg-red-700 hover:shadow-lg hover:shadow-red-900/30 transition-all transform hover:-translate-y-0.5 active:scale-95 flex items-center">
+                                    Login
+                                </button>
                             </div>
                         </div>
                     </div>
