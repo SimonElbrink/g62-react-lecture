@@ -1,5 +1,10 @@
 import {Mail, User, X} from "lucide-react";
-import {type ChangeEvent, type SubmitEvent, useState} from "react";
+import { useForm, type SubmitHandler } from "react-hook-form"
+
+type FormValues = {
+    name: string;
+    email: string;
+}
 
 // or move to types.ts
 type EventItem = {
@@ -19,56 +24,23 @@ type RegisterModalProps = {
     onSuccess: (message: string) => void;
 }
 
-const RegisterModal = ({ event, onClose, onSuccess }: RegisterModalProps) => {
+const RegisterModal = ({event, onClose, onSuccess}: RegisterModalProps) => {
 
+    const {
+        register,
+        handleSubmit,
+        formState: {errors},
+    } = useForm<FormValues>({
+        defaultValues: {name: "", email: ""},
+    })
 
-    // Controlled form: the inputs show exactly what this state holds
-    const [formData, setFormData] = useState<{ name: string; email: string }>({
-        name: "",
-        email: "",
-    });
-
-    // One optional message per field — empty object means "no errors"
-    const [errors, setErrors] = useState<{ name?: string; email?: string }>({});
-
-    // One handler for all inputs: the input's `name` attribute matches the state key
-    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
-
-    const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
-
-        // Stop the browser's default form submission (which reloads the page)
-        e.preventDefault();
-
-        // 1. VALIDATE — plain TypeScript, no library needed
-        const newErrors: { name?: string; email?: string } = {};
-
-        if (!formData.name.trim()) {
-            newErrors.name = 'Name is required';
-        }
-
-        if (!formData.email.trim()) {
-            newErrors.email = 'Email is required';
-        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-            newErrors.email = 'Email is not valid';
-        }
-
-        setErrors(newErrors);
-
-
-        if (Object.keys(newErrors).length > 0) {
-            return;
-        }
-
-
+    const onSubmit: SubmitHandler<FormValues> = (data) => {
+        console.log(data)
 
         console.log("Sending the Request -- TO API");
 
         onSuccess(`You have successfully registered for ${event.title}!`);
-
-    }
+    };
 
 
     return (
@@ -78,7 +50,7 @@ const RegisterModal = ({ event, onClose, onSuccess }: RegisterModalProps) => {
                     onClick={onClose}
                     className="absolute top-4 right-4 p-2 bg-slate-100 hover:bg-slate-200 rounded-full transition"
                 >
-                    <X className="w-5 h-5 text-slate-700" />
+                    <X className="w-5 h-5 text-slate-700"/>
                 </button>
 
                 <div className="p-8">
@@ -108,52 +80,50 @@ const RegisterModal = ({ event, onClose, onSuccess }: RegisterModalProps) => {
                             Register for this Event
                         </h3>
 
-                        <form className="space-y-4"  onSubmit={handleSubmit}>
+                        <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
                             <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-1">
+                                <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-1">
                                     Full Name
                                 </label>
                                 <div className="relative">
-                                    <User className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                                    <User className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"/>
                                     <input
                                         type="text"
-                                        name="name"
-                                        value={formData.name}
-                                        onChange={handleInputChange}
+                                        aria-invalid={errors.name ? "true" : "false"}
+                                        {...register("name", {required: "Name is required", minLength: {
+                                                value: 2,
+                                                message: "Should be at least 2 letters"
+                                            }})}
                                         className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition"
                                     />
                                 </div>
 
                                 {/* Validation message — rendered only when this field has an error */}
-                                {errors.name && (
-                                    <p className="mt-1 text-sm text-red-600">{errors.name}</p>
-                                )}
+                                {errors.name &&
+                                    <p role="alert" className="mt-1 text-sm text-red-600">{errors.name.message}</p>}
 
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-1">
+                                <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1">
                                     Email Address
                                 </label>
                                 <div className="relative">
-                                    <Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                                    <Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"/>
                                     <input
                                         type="email"
-                                        name="email"
-                                        value={formData.email}
-                                        onChange={handleInputChange}
+                                        aria-invalid={errors.email ? "true" : "false"}
+                                        {...register("email", {required: "Email is required"})}
                                         className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition"
                                     />
                                 </div>
 
-                                {errors.email && (
-                                    <p className="mt-1 text-sm text-red-600">{errors.email}</p>
-                                )}
+                                {errors.email &&
+                                    <p role="alert" className="mt-1 text-sm text-red-600">{errors.email.message}</p>}
 
                             </div>
 
                             <button
-                                // onClick={() => onSuccess}
                                 type="submit"
                                 className="w-full bg-red-600 text-white py-3 rounded-xl font-semibold hover:bg-red-700 transition shadow-sm"
                             >
