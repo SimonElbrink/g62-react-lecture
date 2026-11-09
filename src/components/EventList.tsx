@@ -1,7 +1,8 @@
 import EventCard from "./EventCard.tsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import Toast from "./Toast.tsx";
 import RegisterModal from "./RegisterModal.tsx";
+import axios from "axios";
 
 export type EventItem = {
     id: number;
@@ -22,68 +23,34 @@ const EventList = () => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
 
-    const events: EventItem[] = [
-        {
-            id: 1,
-            image: "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&q=80&w=800",
-            category: "Technology",
-            date: "March 25, 2026",
-            time: "09:00 AM",
-            title: "Tech Innovators Summit 2026",
-            location: "Silicon Valley Convention Center",
-            attendees: 1200
-        },
-        {
-            id: 2,
-            image: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&q=80&w=800",
-            category: "Marketing",
-            date: "April 12, 2026",
-            time: "10:30 AM",
-            title: "Global Marketing Expo",
-            location: "New York City Hall",
-            attendees: 850
-        },
-        {
-            id: 3,
-            image: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&q=80&w=800",
-            category: "Environment",
-            date: "May 05, 2026",
-            time: "02:00 PM",
-            title: "Sustainable Future Forum",
-            location: "London Eco Park",
-            attendees: 500
-        },
-        {
-            id: 4,
-            image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=800",
-            category: "Workshop",
-            date: "June 18, 2026",
-            time: "11:00 AM",
-            title: "AI & Robotics Workshop",
-            location: "Tokyo Innovation Hub",
-            attendees: 300
-        },
-        {
-            id: 5,
-            image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=800",
-            category: "Design",
-            date: "July 22, 2026",
-            time: "07:00 PM",
-            title: "Annual Design Awards",
-            location: "Paris Design Center",
-            attendees: 1500
-        },
-        {
-            id: 6,
-            image: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&q=80&w=800",
-            category: "Networking",
-            date: "August 10, 2026",
-            time: "06:30 PM",
-            title: "Startup Founders Networking",
-            location: "Berlin Co-working Space",
-            attendees: 200
-        }
-    ];
+    const [events,setEvents] = useState<EventItem[]>([]);
+    const [apiError, setApiError] = useState<string>("");
+
+    useEffect(() => {
+        const loadEvents = async () =>{
+            try{
+
+                const response = await axios.get<EventItem[]>(
+                    `http://localhost:8080/api/v1/events`
+                );
+
+                console.log(response.data);
+                setEvents(response.data);
+                setApiError("");
+
+
+            }catch (error){
+                console.error("Failed to load events:", error);
+                setApiError("Failed to load events. Please try again later.");
+            }
+        };
+
+        void loadEvents();
+
+    },[]);
+
+
+
 
 
     const handleClick = (event: EventItem) => {
@@ -116,10 +83,12 @@ const EventList = () => {
                     </button>
                 </div>
 
+                {apiError && <p className="mb-6 rounded-lg bg-red-50 p-4 text-red-700">{apiError}</p>}
+
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
                     {events.map((event, index) => (
-                        <EventCard key={index} {...event} onRegister={() => handleClick(event)}/>
+                        <EventCard key={index} event={event} onRegister={() => handleClick(event)}/>
                     ))}
 
                     {showToast && (

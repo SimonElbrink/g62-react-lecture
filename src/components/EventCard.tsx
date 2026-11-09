@@ -1,18 +1,22 @@
 import {Calendar, Clock, MapPin} from "lucide-react";
 
 interface EventCardProps {
-    title: string;
-    date: string;
-    time: string;
-    location: string;
-    attendees: number | string;
-    category: string;
-    image: string;
     onRegister?: () => void;
 }
 
 
-const EventCard = ({title, date, time, location, attendees, category, image, onRegister}: EventCardProps) => {
+const EventCard = ({event, onRegister}: EventCardProps) => {
+
+    const {
+        image,
+        category,
+        date,
+        time,
+        title,
+        location,
+        attendees
+    }  = event;
+
     return (
         <div
             className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border-2 border-slate-100 hover:border-red-100 group">
@@ -30,7 +34,7 @@ const EventCard = ({title, date, time, location, attendees, category, image, onR
                 <div className="flex items-center text-slate-500 text-sm mb-4 space-x-4">
                     <div className="flex items-center">
                         <Calendar/>
-                        {date.toUpperCase()}
+                        {date}
                     </div>
                     <div className="flex items-center">
                         <Clock className="w-4 h-4 mr-2 text-red-600" />
