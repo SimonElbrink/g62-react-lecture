@@ -1,5 +1,7 @@
 import {Mail, User, X} from "lucide-react";
 import { useForm, type SubmitHandler } from "react-hook-form"
+import {useState} from "react";
+import axios from "axios";
 
 type FormValues = {
     name: string;
@@ -34,12 +36,22 @@ const RegisterModal = ({event, onClose, onSuccess}: RegisterModalProps) => {
         defaultValues: {name: "", email: ""},
     })
 
-    const onSubmit: SubmitHandler<FormValues> = (data) => {
+    const [apiError, setApiError] = useState<string>("");
+    const onSubmit: SubmitHandler<FormValues> = async (data) => {
         console.log(data)
 
-        console.log("Sending the Request -- TO API");
+        try {
+            await axios.post(
+                `http://localhost:8080/api/v1/events/${event.id}/participants`,
+                { name: data.name, email: data.email }
+            );
 
-        onSuccess(`You have successfully registered for ${event.title}!`);
+            // Only a successful response reaches this line
+            onSuccess(`You have successfully registered for ${event.title}!`);
+        } catch (error) {
+            console.error("Registration failed:", error);
+            setApiError("Registration failed. Please try again.");
+        }
     };
 
 
@@ -122,6 +134,13 @@ const RegisterModal = ({event, onClose, onSuccess}: RegisterModalProps) => {
                                     <p role="alert" className="mt-1 text-sm text-red-600">{errors.email.message}</p>}
 
                             </div>
+
+                            {/* Server-side failure — not tied to a single field */}
+                            {apiError && (
+                                <p className="rounded-lg bg-red-50 p-3 text-sm text-red-700">
+                                    {apiError}
+                                </p>
+                            )}
 
                             <button
                                 type="submit"
