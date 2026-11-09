@@ -1,5 +1,6 @@
 import React from "react";
 import {Calendar, Home, Info, Menu, Phone, Rocket, Star, X} from "lucide-react";
+import {Link, NavLink} from "react-router-dom";
 
 type NavItem = {
     label: string;
@@ -12,10 +13,10 @@ const Navbar = () => {
     const title: string = "Event App"
 
     const items: NavItem[] = [
-        {label: 'Home', href: '#', icon: Home},
-        {label: 'About', href: '#', icon: Info},
-        {label: 'Features', href: '#', icon: Star},
-        {label: 'Contact', href: '#', icon: Phone}
+        {label: 'Home', href: '/', icon: Home},
+        {label: 'About', href: '/about', icon: Info},
+        {label: 'Features', href: '/features', icon: Star},
+        {label: 'Contact', href: '/contact', icon: Phone}
     ];
 
 
@@ -25,7 +26,7 @@ const Navbar = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-20">
                     {/* Logo and Brand */}
-                    <div className="flex items-center group cursor-pointer">
+                    <Link to="/" className="flex items-center group cursor-pointer">
                         <div
                             className="flex-shrink-0 bg-red-600 p-2 rounded-xl group-hover:bg-red-700 transition-colors duration-300">
                             <Calendar className="size-6 text-white"/>
@@ -33,7 +34,7 @@ const Navbar = () => {
                         </div>
                         <span
                             className="ml-3 font-bold text-2xl tracking-tight text-white group-hover:text-red-500 transition-colors duration-300">{title}</span>
-                    </div>
+                    </Link>
 
                     {/*Desktop Menu*/}
                     <div className="hidden md:block">
@@ -43,12 +44,15 @@ const Navbar = () => {
 
                                 const Icon = item.icon;
                                 return (
-                                    <a key={index}
-                                       href={item.href}
-                                       className="flex items-center text-slate-300 hover:text-red-500 text-sm font-semibold transition-colors duration-200">
+                                    <NavLink key={index}
+                                       to={item.href}
+                                       className={({isActive}) =>`
+                                       flex items-center text-sm font-semibold transition-colors duration-200 ${isActive ? 'text-red-500' : 'text-slate-300 hover:text-red-400'}
+                                       `}
+                                    >
                                         <Icon className="w-4 h-4 mr-2"/>
                                         {item.label}
-                                    </a>
+                                    </NavLink>
                                 )
                             })}
 
@@ -75,26 +79,26 @@ const Navbar = () => {
                         <div
                             className={"fixed top-20 left-0 w-full max-h-0 opacity-0 overflow-hidden bg-slate-900/98 backdrop-blur-lg border-b border-slate-800 transition-all duration-300 ease-in-out peer-checked:max-h-96 peer-checked:opacity-100"}>
                             <div className="px-4 pt-2 pb-6 space-y-2 sm:px-3">
-                                <a href="#"
-                                   className="flex items-center px-3 py-3 rounded-xl text-base font-semibold text-slate-300 hover:bg-slate-800 hover:text-red-500 transition-all duration-200">
+                                <Link to={"/"}
+                                      className="flex items-center px-3 py-3 rounded-xl text-base font-semibold text-slate-300 hover:bg-slate-800 hover:text-red-500 transition-all duration-200">
                                     <Home className="size-5 mr-3"/>
                                     Home
-                                </a>
-                                <a href="#"
-                                   className="flex items-center px-3 py-3 rounded-xl text-base font-semibold text-slate-300 hover:bg-slate-800 hover:text-red-500 transition-all duration-200">
+                                </Link>
+                                <Link to={"/about"}
+                                      className="flex items-center px-3 py-3 rounded-xl text-base font-semibold text-slate-300 hover:bg-slate-800 hover:text-red-500 transition-all duration-200">
                                     <Info className="size-5 mr-3"/>
                                     About
-                                </a>
+                                </Link>
                                 <a href="#"
                                    className="flex items-center px-3 py-3 rounded-xl text-base font-semibold text-slate-300 hover:bg-slate-800 hover:text-red-500 transition-all duration-200">
                                     <Star className="size-5 mr-3"/>
                                     Features
                                 </a>
-                                <a href="#"
-                                   className="flex items-center px-3 py-3 rounded-xl text-base font-semibold text-slate-300 hover:bg-slate-800 hover:text-red-500 transition-all duration-200">
+                                <Link to={"/contact"}
+                                      className="flex items-center px-3 py-3 rounded-xl text-base font-semibold text-slate-300 hover:bg-slate-800 hover:text-red-500 transition-all duration-200">
                                     <Phone className="size-5 mr-3"/>
                                     Contact
-                                </a>
+                                </Link>
                                 <div className="pt-4">
                                     <button
                                         className="w-full flex items-center justify-center bg-red-600 text-white px-4 py-3 rounded-xl font-bold text-base hover:bg-red-700 shadow-lg shadow-red-900/20 transition-all">
