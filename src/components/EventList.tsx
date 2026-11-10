@@ -4,15 +4,17 @@ import Toast from "./Toast.tsx";
 import RegisterModal from "./RegisterModal.tsx";
 import axios from "axios";
 
-export type EventItem = {
+// or move to types.ts
+export type EventResponseDTO = {
     id: number;
     title: string;
-    date: string;
-    time: string;
+    description: string;
+    dateTime: string;
     location: string;
-    attendees: number;
+    status: string;
     image: string;
     category: string;
+    attendees: number;
 };
 
 const EventList = () => {
@@ -21,16 +23,16 @@ const EventList = () => {
     const [toastMessage, setToastMessage] = useState<string>("");
 
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-    const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
+    const [selectedEvent, setSelectedEvent] = useState<EventResponseDTO | null>(null);
 
-    const [events,setEvents] = useState<EventItem[]>([]);
+    const [events,setEvents] = useState<EventResponseDTO[]>([]);
     const [apiError, setApiError] = useState<string>("");
 
     useEffect(() => {
         const loadEvents = async () =>{
             try{
 
-                const response = await axios.get<EventItem[]>(
+                const response = await axios.get<EventResponseDTO[]>(
                     `http://localhost:8080/api/v1/events`
                 );
 
@@ -53,7 +55,7 @@ const EventList = () => {
 
 
 
-    const handleClick = (event: EventItem) => {
+    const handleClick = (event: EventResponseDTO) => {
         setToastMessage("Register form opened.")
         setShowToast(true);
 

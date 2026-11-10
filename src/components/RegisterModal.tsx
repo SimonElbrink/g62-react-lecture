@@ -2,26 +2,15 @@ import {Mail, User, X} from "lucide-react";
 import { useForm, type SubmitHandler } from "react-hook-form"
 import {useState} from "react";
 import axios from "axios";
+import type {EventResponseDTO} from "./EventList.tsx";
 
 type FormValues = {
     name: string;
     email: string;
 }
 
-// or move to types.ts
-type EventItem = {
-    id: number;
-    title: string;
-    date: string;
-    time: string;
-    location: string;
-    attendees: number;
-    image: string;
-    category: string;
-}
-
 type RegisterModalProps = {
-    event: EventItem;
+    event: EventResponseDTO;
     onClose: () => void;
     onSuccess: (message: string) => void;
 }
@@ -78,7 +67,7 @@ const RegisterModal = ({event, onClose, onSuccess}: RegisterModalProps) => {
                         </h2>
 
                         <div className="text-slate-500 mb-6 flex gap-4 text-sm">
-                            <span>{event.date}</span>
+                            <span>{new Date(event.dateTime).toLocaleDateString('sv-SE')}</span>
                             <span>{event.location}</span>
                         </div>
 

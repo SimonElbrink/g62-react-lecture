@@ -1,51 +1,44 @@
 import {Calendar, Clock, MapPin} from "lucide-react";
+import type {EventResponseDTO} from "./EventList.tsx";
 
 interface EventCardProps {
+    event: EventResponseDTO
     onRegister?: () => void;
 }
 
 
 const EventCard = ({event, onRegister}: EventCardProps) => {
 
-    const {
-        image,
-        category,
-        date,
-        time,
-        title,
-        location,
-        attendees
-    }  = event;
 
     return (
         <div
             className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border-2 border-slate-100 hover:border-red-100 group">
             <div className="relative h-64 overflow-hidden">
                 <img
-                    src={image}
-                    alt={title}
+                    src={event.image}
+                    alt={event.title}
                     className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"/>
                 <div className="absolute top-4 left-4">
                                 <span
-                                    className="bg-white/90 backdrop-blur-md text-slate-900 px-4 py-1.5 rounded-full text-xs font-bold shadow-sm">{category}</span>
+                                    className="bg-white/90 backdrop-blur-md text-slate-900 px-4 py-1.5 rounded-full text-xs font-bold shadow-sm">{event.category}</span>
                 </div>
             </div>
             <div className="p-8">
                 <div className="flex items-center text-slate-500 text-sm mb-4 space-x-4">
                     <div className="flex items-center">
                         <Calendar/>
-                        {date}
+                        {new Date(event.dateTime).toLocaleDateString('sv-SE')}
                     </div>
                     <div className="flex items-center">
                         <Clock className="w-4 h-4 mr-2 text-red-600" />
-                        {time}
+                        {new Date(event.dateTime).toLocaleTimeString('sv-SE', {hour: '2-digit', minute: '2-digit'})}
                     </div>
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-4 group-hover:text-red-600 transition-colors">{title}</h3>
+                <h3 className="text-xl font-bold text-slate-900 mb-4 group-hover:text-red-600 transition-colors">{event.title}</h3>
                 <div className="space-y-3 mb-8">
                     <div className="flex items-start text-slate-600 text-sm">
                         <MapPin className="w-4 h-4 mr-3 mt-0.5 text-slate-400" />
-                        {location}
+                        {event.location}
                     </div>
                     <div className="flex items-center text-slate-600 text-sm">
                         <svg className="w-4 h-4 mr-3 text-slate-400" viewBox="0 0 24 24" fill="none"
@@ -56,7 +49,7 @@ const EventCard = ({event, onRegister}: EventCardProps) => {
                             <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
                             <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                         </svg>
-                        {attendees.toLocaleString()} Attendees
+                        {event.attendees.toLocaleString()} Attendees
                     </div>
                 </div>
                 <button
